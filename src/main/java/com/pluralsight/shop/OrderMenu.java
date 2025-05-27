@@ -4,9 +4,10 @@ import java.util.Scanner;
 
 public class OrderMenu {
 
+    Scanner scanner = new Scanner(System.in);
+
     public void display() {
 
-        Scanner scanner = new Scanner(System.in);
 
         boolean ordering = true;
         while (ordering) {
@@ -19,7 +20,7 @@ public class OrderMenu {
                 ordering = false;
 
             } else {
-                orderSandwich();
+                placeOrder();
             }
 
         }
@@ -56,9 +57,57 @@ public class OrderMenu {
 
 
     }
+
+    public Order placeOrder(){
+        Order order = new Order("New Order");
+        System.out.println("Please select an item to add to your order");
+        System.out.println("1. Sandwich\n2. Chips\n3. Drink");
+
+        int orderChoice = Integer.parseInt(scanner.nextLine().trim());
+
+        switch (orderChoice){
+            case 1:
+                orderSandwich();
+            case 2:
+                orderChips(order);
+            case 3:
+                orderDrinks(order);
+        }
+
+        return order;
+    }
+
     public void orderSandwich() {
 
+        Sandwich sandwich = new Sandwich();
 
+    }
+
+    public void orderChips(Order order){
+        System.out.println("Please select the type of chips you would like");
+        System.out.println("1. Potato Chips\n2. Kettle Chips\n3. Sun Chips");
+        int chipChoice = Integer.parseInt(scanner.nextLine().trim());
+        switch (chipChoice){
+            case 1:
+                order.orderAdd(new Chip("Potato Chips"));
+            case 2:
+                order.orderAdd(new Chip("Kettle Chips"));
+            case 3:
+                order.orderAdd(new Chip("Sun Chips"));
+        }
+    }
+    public void orderDrinks(Order order){
+        System.out.println("Please select the type of chips you would like");
+        System.out.println("1. Potato Chips\n2. Kettle Chips\n3. Sun Chips");
+        int chipChoice = Integer.parseInt(scanner.nextLine().trim());
+        switch (chipChoice){
+            case 1:
+                order.orderAdd(new Chip("Water"));
+            case 2:
+                order.orderAdd(new Chip("Pepsi"));
+            case 3:
+                order.orderAdd(new Chip("Sun Chips"));
+        }
     }
 
 }
