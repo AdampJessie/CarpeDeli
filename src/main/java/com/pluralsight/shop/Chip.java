@@ -15,4 +15,9 @@ public class Chip extends Product{
         super(price);
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "Chips - " + this.type +" - $" + this.getPrice();
+    }
 }

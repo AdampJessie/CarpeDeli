@@ -48,6 +48,10 @@ public class Sandwich extends Product{
         this.size = size;
     }
 
+    public void addTopping(Topping topping){
+        toppings.add(topping);
+    }
+
     public Sandwich(double price, boolean isExtraCheese, boolean isExtraMeat, boolean isToasted, int breadType, int size, List<Topping> toppings) {
         super(price);
         this.isExtraCheese = isExtraCheese;

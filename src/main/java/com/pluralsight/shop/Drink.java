@@ -21,14 +21,14 @@ public class Drink extends Product{
         this.flavor = flavor;
     }
 
-    @Override
-    public double getPrice() {
-        return super.getPrice()*this.size;
-    }
-
     public Drink(double price, int size, String flavor) {
         super(price);
         this.size = size;
         this.flavor = flavor;
+    }
+
+    @Override
+    public String toString() {
+        return "Drink - " + this.size +" - " + this.flavor+" - $" + this.getPrice();
     }
 }

@@ -17,8 +17,11 @@ public class Order {
 
     public void add(Product product){
         order.add(product);
-
     }
 
+    public double getTotal(){
+        return order.stream()
+                .mapToDouble(Product::getPrice).sum();
+    }
 
 }

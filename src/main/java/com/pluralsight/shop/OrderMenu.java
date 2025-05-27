@@ -21,7 +21,7 @@ public class OrderMenu {
 
             } else {
                 Order newOrder = placeOrder();
-                newOrder.order.forEach(System.out::println);
+                System.out.println(newOrder);
             }
 
         }
@@ -89,6 +89,23 @@ public class OrderMenu {
     }
 
     public void orderSandwich() {
+
+        System.out.println("1. Small\n2. Medium\n3. Large");
+        System.out.print("Please select a size for your sandwich: ");
+        int intSize = Integer.parseInt(scanner.nextLine().trim());
+
+        System.out.println("1. White\n2. Wheat\n3. Rye\n4. Wrap");
+        System.out.print("Please select a bread: ");
+        int breadType = Integer.parseInt(scanner.nextLine().trim());
+
+        System.out.println("1. Cheddar\n2. Provolone\n3. Swiss\n4. Mozzarella");
+        System.out.print("Please select a cheese: ");
+        int cheeseType = Integer.parseInt(scanner.nextLine().trim());
+
+        System.out.println("1. Ham\n2. Turkey\n3. Salami\n4. Roast Beef");
+        System.out.print("Please select a meat: ");
+        int meatType = Integer.parseInt(scanner.nextLine().trim());
+
     }
 
     public void orderChips(Order order){
