@@ -11,7 +11,8 @@ public class Chip extends Product{
         this.type = type;
     }
 
-    public Chip(String type) {
+    public Chip(double price, String type) {
+        super(price);
         this.type = type;
     }
 }

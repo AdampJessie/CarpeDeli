@@ -15,7 +15,7 @@ public class Order {
         this.description = description;
     }
 
-    public void orderAdd(Product product){
+    public void add(Product product){
         order.add(product);
 
     }

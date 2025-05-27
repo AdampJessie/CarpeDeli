@@ -20,7 +20,8 @@ public class OrderMenu {
                 ordering = false;
 
             } else {
-                placeOrder();
+                Order newOrder = placeOrder();
+                newOrder.order.forEach(System.out::println);
             }
 
         }
@@ -60,54 +61,102 @@ public class OrderMenu {
 
     public Order placeOrder(){
         Order order = new Order("New Order");
-        System.out.println("Please select an item to add to your order");
-        System.out.println("1. Sandwich\n2. Chips\n3. Drink");
+        boolean ordering = true;
+        while (ordering) {
+            System.out.println(textBorder);
+            System.out.println("1. Sandwich\n2. Chips\n3. Drink\n4. Finish and Pay");
+            System.out.println(textBorder);
+            System.out.print("Please select an item to add to your order\nOr if your order is completed, finish and pay: ");
+            int orderChoice = Integer.parseInt(scanner.nextLine().trim());
 
-        int orderChoice = Integer.parseInt(scanner.nextLine().trim());
-
-        switch (orderChoice){
-            case 1:
-                orderSandwich();
-            case 2:
-                orderChips(order);
-            case 3:
-                orderDrinks(order);
+            switch (orderChoice) {
+                case 1:
+                    orderSandwich();
+                    break;
+                case 2:
+                    orderChips(order);
+                    break;
+                case 3:
+                    orderDrinks(order);
+                    break;
+                case 4:
+                    checkOut();
+                    ordering = false;
+                    break;
+            }
         }
-
         return order;
     }
 
     public void orderSandwich() {
-
-        Sandwich sandwich = new Sandwich();
-
     }
 
     public void orderChips(Order order){
-        System.out.println("Please select the type of chips you would like");
-        System.out.println("1. Potato Chips\n2. Kettle Chips\n3. Sun Chips");
-        int chipChoice = Integer.parseInt(scanner.nextLine().trim());
-        switch (chipChoice){
-            case 1:
-                order.orderAdd(new Chip("Potato Chips"));
-            case 2:
-                order.orderAdd(new Chip("Kettle Chips"));
-            case 3:
-                order.orderAdd(new Chip("Sun Chips"));
-        }
+        System.out.println(textBorder);
+        System.out.println("1. Potato\n2. Kettle\n3. Buffalo");
+        System.out.println(textBorder);
+        System.out.print("Please select the chips you would like: ");
+        int choice = Integer.parseInt(scanner.nextLine().trim());
+        String chipFlavor = switch (choice) {
+            case 1 -> "Potato";
+            case 2 -> "Kettle";
+            case 3 -> "Buffalo";
+            default -> "";
+        };
+
+        System.out.println(textBorder);
+        if (!chipFlavor.isEmpty()){
+            order.add(new Chip(1.50, chipFlavor));
+            System.out.println("Added " + chipFlavor + " Chips for $1.50!");
+        }else System.out.println("Failed to add chips! Please try again.");
+
+
     }
     public void orderDrinks(Order order){
-        System.out.println("Please select the type of chips you would like");
-        System.out.println("1. Potato Chips\n2. Kettle Chips\n3. Sun Chips");
-        int chipChoice = Integer.parseInt(scanner.nextLine().trim());
-        switch (chipChoice){
+        System.out.println(textBorder);
+        System.out.println("1. Small\n2. Medium\n3. Large");
+        System.out.println(textBorder);
+        System.out.print("Please select a size for your drink: ");
+        int intSize = Integer.parseInt(scanner.nextLine().trim());
+        String stringSize = switch (intSize) {
+            case 1 -> "Small";
+            case 2 -> "Medium";
+            case 3 -> "Large";
+            default -> "";
+        };
+
+        double drinkPrice = 1.50 + (.50 * intSize);
+
+        System.out.println(textBorder);
+        System.out.println("1. Water\n2. Pepsi\n3. Sprite");
+        System.out.println(textBorder);
+        System.out.println("Please select the drink you would like: ");
+        int drinkChoice = Integer.parseInt(scanner.nextLine().trim());
+
+        String drinkFlavor = "";
+        switch (drinkChoice){
             case 1:
-                order.orderAdd(new Chip("Water"));
+                drinkFlavor = "Water";
+                drinkPrice = 0;
+                break;
             case 2:
-                order.orderAdd(new Chip("Pepsi"));
+                drinkFlavor = "Pepsi";
+                break;
             case 3:
-                order.orderAdd(new Chip("Sun Chips"));
+                drinkFlavor = "Sprite";
+                break;
         }
+
+        System.out.println(textBorder);
+        if (!drinkFlavor.isEmpty()) {
+            order.add(new Drink(drinkPrice, intSize, drinkFlavor));
+            System.out.printf("Successfully added a %s %s for $%.2f!\n", stringSize, drinkFlavor, drinkPrice);
+        }else System.out.println("Failed to add drink! Please try again.");
+
+    }
+
+    public void checkOut(){
+
     }
 
 }
