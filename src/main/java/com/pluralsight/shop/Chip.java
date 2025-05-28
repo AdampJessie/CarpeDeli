@@ -18,6 +18,6 @@ public class Chip extends Product{
 
     @Override
     public String toString() {
-        return "Chips - " + this.type +" - $" + this.getPrice();
+        return String.format("Chips - %-10s | %.2f", this.getType(), this.getPrice());
     }
 }

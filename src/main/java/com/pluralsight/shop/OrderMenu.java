@@ -27,7 +27,6 @@ public class OrderMenu {
 
     }
 
-
     private final String colorReset = "\u001B[0m";
     private final String colorCyan = "\u001B[36m";
     private final String colorGreen = "\u001B[32m";
@@ -50,12 +49,13 @@ public class OrderMenu {
     }
 
     public void displayEnd() {
-        String endMessage = colorGreen + "Thank you for your business!\n" + colorBlue + "Have a great day!";
 
+        String endMessage = colorGreen + "Thank you for your business!\n" + colorBlue + "Have a great day!";
         System.out.println(colorCyan + textBorder + colorReset);
         System.out.println(endMessage);
 
     }
+
 
     public Order placeOrder() {
         Order order = new Order("New Order");
@@ -93,37 +93,84 @@ public class OrderMenu {
         System.out.println("1. Small\n2. Medium\n3. Large");
         System.out.print("Please select a size for your sandwich: ");
         int intSize = Integer.parseInt(scanner.nextLine().trim());
+        String size = switch (intSize) {
+            case 1 -> "Small";
+            case 2 -> "Medium";
+            case 3 -> "Large";
+            default -> "";
+        };
 
         System.out.println("1. White\n2. Wheat\n3. Rye\n4. Wrap");
         System.out.print("Please select the type of bread: ");
-        int breadType = Integer.parseInt(scanner.nextLine().trim());
+        int breadChoice = Integer.parseInt(scanner.nextLine().trim());
+        String breadType = switch (breadChoice) {
+            case 1 -> "White";
+            case 2 -> "Wheat";
+            case 3 -> "Rye";
+            case 4 -> "Wrap";
+            default -> "";
+        };
+
+        System.out.println("1. Yes\n2. No");
+        System.out.print("Toasted?: ");
+        boolean toasted = (Integer.parseInt(scanner.nextLine().trim()) == 1);
+        if (toasted) System.out.println("Toasted bread, coming right up!");
 
         System.out.println("1. Cheddar\n2. Provolone\n3. Swiss\n4. Mozzarella");
         System.out.print("Please select a cheese to add: ");
-        int cheeseType = Integer.parseInt(scanner.nextLine().trim());
-
+        int cheeseChoice = Integer.parseInt(scanner.nextLine().trim());
+        String cheeseType = switch (cheeseChoice) {
+            case 1 -> "Cheddar";
+            case 2 -> "Provolone";
+            case 3 -> "Swiss";
+            case 4 -> "Mozzarella";
+            default -> "";
+        };
 
         System.out.println("1. Yes\n2. No");
-        System.out.print("Extra Cheese?");
-        int extraCheese = Integer.parseInt(scanner.nextLine().trim());
+        System.out.print("Extra Cheese?: ");
+        boolean extraCheese = (Integer.parseInt(scanner.nextLine().trim()) == 1);
 
 
-        System.out.println("1. Ham\n2. Turkey\n3. Salami\n4. Roast Beef");
+        System.out.println("1. Ham\n2. Turkey\n3. Salami\n4. Roast Beef\n5. Chicken");
         System.out.print("Please select a meat to add: ");
-        int meatType = Integer.parseInt(scanner.nextLine().trim());
+        int meatChoice = Integer.parseInt(scanner.nextLine().trim());
+        String meatType = switch (meatChoice) {
+            case 1 -> "Ham";
+            case 2 -> "Turkey";
+            case 3 -> "Salami";
+            case 4 -> "Roast Beef";
+            case 5 -> "Chicken";
+            default -> "";
+        };
+
 
         System.out.println("1. Yes\n2. No");
         System.out.print("Extra Meat?: ");
-        int extraMeat = Integer.parseInt(scanner.nextLine().trim());
+        boolean extraMeat = (Integer.parseInt(scanner.nextLine().trim()) == 1);
 
         System.out.println("1. Lettuce\n2. Onion\n3. Pickle\n4. Peppers\n5. Mushrooms");
         System.out.print("Please select a topping to add: ");
-        int topping = Integer.parseInt(scanner.nextLine().trim());
-
+        int toppingChoice = Integer.parseInt(scanner.nextLine().trim());
+        String topping = switch (toppingChoice) {
+            case 1 -> "Lettuce";
+            case 2 -> "Onion";
+            case 3 -> "Pickle";
+            case 4 -> "Peppers";
+            case 5 -> "Mushrooms";
+            default -> "";
+        };
         System.out.println("1. Mayo\n2. Mustard\n3. Vinaigrette\n4. Au Jus\n5. Guacamole");
         System.out.print("Please select a sauce to add: ");
-        int sauce = Integer.parseInt(scanner.nextLine().trim());
-
+        int sauceChoice = Integer.parseInt(scanner.nextLine().trim());
+        String sauce = switch (sauceChoice) {
+            case 1 -> "Mayo";
+            case 2 -> "Mustard";
+            case 3 -> "Vinaigrette";
+            case 4 -> "Au Jus";
+            case 5 -> "Guacamole";
+            default -> "";
+        };
     }
 
     public void addChips(Order order) {
@@ -176,23 +223,19 @@ public class OrderMenu {
         System.out.println("Please select the drink you would like: ");
         int drinkChoice = Integer.parseInt(scanner.nextLine().trim());
 
-        String drinkFlavor = "";
-        switch (drinkChoice) {
-            case 1:
-                drinkFlavor = "Water";
-                drinkPrice = 0;
-                break;
-            case 2:
-                drinkFlavor = "Pepsi";
-                break;
-            case 3:
-                drinkFlavor = "Sprite";
-                break;
-        }
+        String drinkFlavor = switch (drinkChoice) {
+            case 1 -> "Water";
+            case 2 -> "Pepsi";
+            case 3 -> "Sprite";
+            default -> "";
+        };
+
+        if (drinkFlavor.equalsIgnoreCase("Water"))
+            drinkPrice = 0.0;
 
         System.out.println(colorCyan + textBorder + colorReset);
 
-        if (!drinkFlavor.isEmpty()) {
+        if (!drinkFlavor.isEmpty() && !stringSize.isEmpty()) {
             order.add(new Drink(drinkPrice, intSize, drinkFlavor));
             System.out.printf("Successfully added a %s %s for $%.2f!\n", stringSize, drinkFlavor, drinkPrice);
         } else System.out.println("Failed to add drink! Please try again.");
@@ -200,7 +243,8 @@ public class OrderMenu {
     }
 
     public void orderCheck(Order order) {
-        //DISPLAY ORDER
+
+        System.out.println(order.receipt());
 
         boolean confirming = true;
         while (confirming) {
@@ -221,7 +265,6 @@ public class OrderMenu {
 
     }
 
-
     public void checkOut(Order order) {
 
         OrderFileManager fileManager = new OrderFileManager();
@@ -232,5 +275,6 @@ public class OrderMenu {
         displayEnd();
 
     }
+
 
 }

@@ -48,10 +48,23 @@ public class Order {
                 .mapToDouble(Product::getPrice).sum();
     }
 
-    public void createReceipt(){
-        System.out.println("Order #"+this.getDate());
+    public String receipt(){
+
+        StringBuilder receiptBuilder = new StringBuilder();
+        receiptBuilder.append("Carpe Deli - Seize the Treat!");
+        receiptBuilder.append("\nOrder #").append(this.getDate());
+        order.forEach(product -> {
+            if (product instanceof Sandwich) receiptBuilder.append("\n\t").append(product);
+        });
+        order.forEach(product -> {
+            if (product instanceof Chip) receiptBuilder.append("\n\t").append(product);
+        });
+        order.forEach(product -> {
+            if (product instanceof Drink) receiptBuilder.append("\n\t").append(product);
+        });
 
 
+        return receiptBuilder.toString();
     }
 
 }

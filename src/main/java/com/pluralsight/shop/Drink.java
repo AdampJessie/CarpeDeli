@@ -27,8 +27,18 @@ public class Drink extends Product{
         this.flavor = flavor;
     }
 
+    public String getStringSize(){
+        return switch (getSize()){
+            case 1 -> "Small";
+            case 2 -> "Medium";
+            case 3 -> "Large";
+            default -> "";
+        };
+
+    }
+
     @Override
     public String toString() {
-        return "Drink - " + this.size +" - " + this.flavor+" - $" + this.getPrice();
+        return String.format("Drink - %-10s | %.2f", getStringSize(), getPrice());
     }
 }

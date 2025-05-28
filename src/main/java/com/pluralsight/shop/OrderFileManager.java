@@ -12,7 +12,7 @@ public class OrderFileManager {
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("receipts/"+fileName, true))) {
 
-            bw.write("This is just a test!");
+            bw.write(order.receipt());
 
             System.out.println("Receipt saved successfully!");
         } catch (IOException e) {
