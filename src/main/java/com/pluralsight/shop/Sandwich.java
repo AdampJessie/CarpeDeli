@@ -52,6 +52,10 @@ public class Sandwich extends Product{
         toppings.add(topping);
     }
 
+    public void removeTopping(Topping topping){
+
+    }
+
     public Sandwich(double price, boolean isExtraCheese, boolean isExtraMeat, boolean isToasted, int breadType, int size, List<Topping> toppings) {
         super(price);
         this.isExtraCheese = isExtraCheese;

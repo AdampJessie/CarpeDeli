@@ -1,6 +1,6 @@
 package com.pluralsight.shop;
 
-public class Topping{
+public abstract class Topping{
 
     private String type;
 

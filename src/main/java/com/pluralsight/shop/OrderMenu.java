@@ -21,7 +21,6 @@ public class OrderMenu {
 
             } else {
                 Order newOrder = placeOrder();
-                System.out.println(newOrder);
             }
 
         }
@@ -49,24 +48,25 @@ public class OrderMenu {
         System.out.println(colorCyan + textBorder + colorReset);
         System.out.print("Please select an option: ");
     }
-    public void displayEnd(){
+
+    public void displayEnd() {
         String endMessage = colorGreen + "Thank you for your business!\n" + colorBlue + "Have a great day!";
 
         System.out.println(colorCyan + textBorder + colorReset);
         System.out.println(endMessage);
-        System.out.println(colorCyan + textBorder + colorReset);
-
 
     }
 
-    public Order placeOrder(){
+    public Order placeOrder() {
         Order order = new Order("New Order");
         boolean ordering = true;
         while (ordering) {
-            System.out.println(textBorder);
-            System.out.println("1. Sandwich\n2. Chips\n3. Drink\n4. Finish and Pay");
-            System.out.println(textBorder);
-            System.out.print("Please select an item to add to your order\nOr if your order is completed, finish and pay: ");
+            System.out.println(colorCyan + textBorder + colorReset);
+
+            System.out.println("1. Add Sandwich\n2. Add Chips\n3. Add Drink\n4. Check Out");
+            System.out.println(colorCyan + textBorder + colorReset);
+
+            System.out.print("Please select an item to add to your order\nIf you are finished, confirm and check out: ");
             int orderChoice = Integer.parseInt(scanner.nextLine().trim());
 
             switch (orderChoice) {
@@ -74,13 +74,13 @@ public class OrderMenu {
                     orderSandwich();
                     break;
                 case 2:
-                    orderChips(order);
+                    addChips(order);
                     break;
                 case 3:
-                    orderDrinks(order);
+                    addDrinks(order);
                     break;
                 case 4:
-                    checkOut();
+                    orderCheck(order);
                     ordering = false;
                     break;
             }
@@ -95,23 +95,43 @@ public class OrderMenu {
         int intSize = Integer.parseInt(scanner.nextLine().trim());
 
         System.out.println("1. White\n2. Wheat\n3. Rye\n4. Wrap");
-        System.out.print("Please select a bread: ");
+        System.out.print("Please select the type of bread: ");
         int breadType = Integer.parseInt(scanner.nextLine().trim());
 
         System.out.println("1. Cheddar\n2. Provolone\n3. Swiss\n4. Mozzarella");
-        System.out.print("Please select a cheese: ");
+        System.out.print("Please select a cheese to add: ");
         int cheeseType = Integer.parseInt(scanner.nextLine().trim());
 
+
+        System.out.println("1. Yes\n2. No");
+        System.out.print("Extra Cheese?");
+        int extraCheese = Integer.parseInt(scanner.nextLine().trim());
+
+
         System.out.println("1. Ham\n2. Turkey\n3. Salami\n4. Roast Beef");
-        System.out.print("Please select a meat: ");
+        System.out.print("Please select a meat to add: ");
         int meatType = Integer.parseInt(scanner.nextLine().trim());
+
+        System.out.println("1. Yes\n2. No");
+        System.out.print("Extra Meat?: ");
+        int extraMeat = Integer.parseInt(scanner.nextLine().trim());
+
+        System.out.println("1. Lettuce\n2. Onion\n3. Pickle\n4. Peppers\n5. Mushrooms");
+        System.out.print("Please select a topping to add: ");
+        int topping = Integer.parseInt(scanner.nextLine().trim());
+
+        System.out.println("1. Mayo\n2. Mustard\n3. Vinaigrette\n4. Au Jus\n5. Guacamole");
+        System.out.print("Please select a sauce to add: ");
+        int sauce = Integer.parseInt(scanner.nextLine().trim());
 
     }
 
-    public void orderChips(Order order){
-        System.out.println(textBorder);
+    public void addChips(Order order) {
+        System.out.println(colorCyan + textBorder + colorReset);
+
         System.out.println("1. Potato\n2. Kettle\n3. Buffalo");
-        System.out.println(textBorder);
+        System.out.println(colorCyan + textBorder + colorReset);
+
         System.out.print("Please select the chips you would like: ");
         int choice = Integer.parseInt(scanner.nextLine().trim());
         String chipFlavor = switch (choice) {
@@ -121,18 +141,22 @@ public class OrderMenu {
             default -> "";
         };
 
-        System.out.println(textBorder);
-        if (!chipFlavor.isEmpty()){
+        System.out.println(colorCyan + textBorder + colorReset);
+
+        if (!chipFlavor.isEmpty()) {
             order.add(new Chip(1.50, chipFlavor));
             System.out.println("Added " + chipFlavor + " Chips for $1.50!");
-        }else System.out.println("Failed to add chips! Please try again.");
+        } else System.out.println("Failed to add chips! Please try again.");
 
 
     }
-    public void orderDrinks(Order order){
-        System.out.println(textBorder);
+
+    public void addDrinks(Order order) {
+        System.out.println(colorCyan + textBorder + colorReset);
+
         System.out.println("1. Small\n2. Medium\n3. Large");
-        System.out.println(textBorder);
+        System.out.println(colorCyan + textBorder + colorReset);
+
         System.out.print("Please select a size for your drink: ");
         int intSize = Integer.parseInt(scanner.nextLine().trim());
         String stringSize = switch (intSize) {
@@ -144,14 +168,16 @@ public class OrderMenu {
 
         double drinkPrice = 1.50 + (.50 * intSize);
 
-        System.out.println(textBorder);
+        System.out.println(colorCyan + textBorder + colorReset);
+
         System.out.println("1. Water\n2. Pepsi\n3. Sprite");
-        System.out.println(textBorder);
+        System.out.println(colorCyan + textBorder + colorReset);
+
         System.out.println("Please select the drink you would like: ");
         int drinkChoice = Integer.parseInt(scanner.nextLine().trim());
 
         String drinkFlavor = "";
-        switch (drinkChoice){
+        switch (drinkChoice) {
             case 1:
                 drinkFlavor = "Water";
                 drinkPrice = 0;
@@ -164,15 +190,46 @@ public class OrderMenu {
                 break;
         }
 
-        System.out.println(textBorder);
+        System.out.println(colorCyan + textBorder + colorReset);
+
         if (!drinkFlavor.isEmpty()) {
             order.add(new Drink(drinkPrice, intSize, drinkFlavor));
             System.out.printf("Successfully added a %s %s for $%.2f!\n", stringSize, drinkFlavor, drinkPrice);
-        }else System.out.println("Failed to add drink! Please try again.");
+        } else System.out.println("Failed to add drink! Please try again.");
 
     }
 
-    public void checkOut(){
+    public void orderCheck(Order order) {
+        //DISPLAY ORDER
+
+        boolean confirming = true;
+        while (confirming) {
+            System.out.println("Everything accounted for?");
+            System.out.println("1. Confirm\n2. Cancel");
+            int choice = Integer.parseInt(scanner.nextLine());
+
+            if (choice == 1) {
+                checkOut(order);
+                confirming = false;
+            } else if (choice == 2) {
+                order.cancelOrder();
+                System.out.println("Order cancelled! Try again?");
+                confirming = false;
+            } else System.out.println("Invalid option! Please try again.");
+        }
+
+
+    }
+
+
+    public void checkOut(Order order) {
+
+        OrderFileManager fileManager = new OrderFileManager();
+        fileManager.saveReceipt(order);
+
+        String successMessage = "Sucess! Order confirmed, receipt saved!";
+        System.out.println(colorGreen + successMessage + colorReset);
+        displayEnd();
 
     }
 

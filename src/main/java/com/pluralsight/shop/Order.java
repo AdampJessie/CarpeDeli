@@ -15,13 +15,43 @@ public class Order {
         this.description = description;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void add(Product product){
         order.add(product);
+    }
+
+    public void remove(Product product){
+        order.remove(product);
+    }
+
+    public void cancelOrder(){
+        order.clear();
     }
 
     public double getTotal(){
         return order.stream()
                 .mapToDouble(Product::getPrice).sum();
+    }
+
+    public void createReceipt(){
+        System.out.println("Order #"+this.getDate());
+
+
     }
 
 }
