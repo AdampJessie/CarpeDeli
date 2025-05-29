@@ -23,7 +23,7 @@ public class OrderMenu {
                 ordering = false;
 
             } else {
-                Order newOrder = placeOrder();
+                 placeOrder();
             }
 
         }
@@ -83,8 +83,10 @@ public class OrderMenu {
                     addDrinks(order);
                     break;
                 case 4:
-                    orderCheck(order);
-                    ordering = false;
+                    if (!order.getOrder().isEmpty()) {
+                        orderCheck(order);
+                        ordering = false;
+                    } else System.out.println("Order is empty! Returning to selection.");
                     break;
             }
         }
@@ -94,7 +96,7 @@ public class OrderMenu {
     public void orderSandwich(Order order) {
 
         System.out.println(colorCyan + textBorder + colorReset);
-        System.out.println("1. Small\n2. Medium\n3. Large");
+        System.out.println("1. Small (4\")\n2. Medium (8\")\n3. Large (12\")");
         System.out.print("Please select a size for your sandwich: ");
         int intSize = Integer.parseInt(scanner.nextLine().trim());
 
@@ -109,12 +111,16 @@ public class OrderMenu {
             case 4 -> "Wrap";
             default -> "";
         };
+        System.out.println(breadType + ", great choice!");
 
-        System.out.println(colorCyan + textBorder + colorReset);
-        System.out.println("Toasted?");
-        System.out.print("1. Yes 2. No: ");
-        boolean isToasted = (Integer.parseInt(scanner.nextLine().trim()) == 1);
-        if (isToasted) System.out.println("Toasted bread, coming right up!");
+        boolean isToasted = false;
+        if (!breadType.equalsIgnoreCase("Wrap")) {
+            System.out.println(colorCyan + textBorder + colorReset);
+            System.out.println("Would you like that toasted?");
+            System.out.print("1. Yes 2. No: ");
+            isToasted = (Integer.parseInt(scanner.nextLine().trim()) == 1);
+            if (isToasted) System.out.println("Toasted bread, coming right up!");
+        }
 
         List<Topping> meatOptions = new ArrayList<>(List.of
                 (new Meat("Ham")
@@ -163,7 +169,7 @@ public class OrderMenu {
                         , new Sauce("Au Jus")
                         , new Sauce("Guacamole")
                 ));
-        
+
         System.out.println(colorCyan + textBorder + colorReset);
         sandwichToppings.addAll(selectToppings(sauceOptions));
 
@@ -243,6 +249,7 @@ public class OrderMenu {
 
         boolean confirming = true;
         while (confirming) {
+            System.out.println(colorCyan + textBorder + colorReset);
             System.out.println("Everything accounted for?");
             System.out.println("1. Confirm\n2. Cancel");
             int choice = Integer.parseInt(scanner.nextLine());
@@ -252,9 +259,13 @@ public class OrderMenu {
                 confirming = false;
             } else if (choice == 2) {
                 order.cancelOrder();
+                System.out.println(colorCyan + textBorder + colorReset);
                 System.out.println("Order cancelled! Try again?");
                 confirming = false;
-            } else System.out.println("Invalid option! Please try again.");
+            } else {
+                System.out.println(colorCyan + textBorder + colorReset);
+                System.out.println("Invalid option! Please try again.");
+            }
         }
 
 

@@ -8,11 +8,15 @@ import java.util.List;
 public class Order {
     private String date, description;
 
-    List<Product> order = new ArrayList<>();
+    private List<Product> order = new ArrayList<>();
 
     public Order(String description) {
         this.date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-hhmmss"));
         this.description = description;
+    }
+
+    public List<Product> getOrder() {
+        return order;
     }
 
     public String getDate() {
@@ -48,26 +52,30 @@ public class Order {
                 .mapToDouble(Product::getPrice).sum();
     }
 
+    public Order(List<Product> order) {
+        this.order = order;
+    }
+
     public String receipt() {
 
         StringBuilder receiptBuilder = new StringBuilder();
         receiptBuilder.append("-".repeat(50))
-                .append("\nCarpe Deli - Seize the Treat!");
-        receiptBuilder.append("\nOrder #").append(this.getDate())
-                .append("\n").append("-".repeat(50));
+                .append(String.format("\n|  |"));
+        receiptBuilder.append("\n| Order #").append(this.getDate())
+                .append("\n").append("+").append("-".repeat(48)).append("+");
         order.forEach(product -> {
             if (product instanceof Sandwich)
-                receiptBuilder.append("\n\t").append(product);
+                receiptBuilder.append("\n| ").append(product);
         });
         order.forEach(product -> {
-            if (product instanceof Chip) receiptBuilder.append("\n\t").append(product);
+            if (product instanceof Chip) receiptBuilder.append("\n| ").append(product);
 
         });
         order.forEach(product -> {
-            if (product instanceof Drink) receiptBuilder.append("\n\t").append(product);
+            if (product instanceof Drink) receiptBuilder.append("\n| ").append(product);
         });
-        receiptBuilder.append("\n").append("-".repeat(50))
-                .append(String.format("\nTotal Due: $%.2f", getTotal()));
+        receiptBuilder.append("\n").append("+").append("-".repeat(48)).append("+");
+
 
 
         return receiptBuilder.toString();

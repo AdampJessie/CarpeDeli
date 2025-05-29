@@ -81,16 +81,18 @@ public class Sandwich extends Product{
         String toasted = (isToasted) ? "Toasted" : "Not Toasted";
         StringBuilder sandwichString = new StringBuilder();
 
-        sandwichString.append(String.format("Sandwich - %d\" - %s - %s | %.2f", size, breadType, toasted, getPrice()));
+        sandwichString.append(String.format("Sandwich - %d\" - %s - %-12s | $%-6.2f |", size*4, breadType, toasted, getPrice()));
+
+
         toppings.forEach(topping ->{
             if (topping instanceof Meat)
-                sandwichString.append("\n\t-").append(topping);
+                sandwichString.append(String.format("\n|%-46s|", "\t-" + topping));
             if (topping instanceof Cheese)
-                sandwichString.append("\n\t-").append(topping);
+                sandwichString.append(String.format("\n|%-46s|", "\t-" + topping));
             if (topping instanceof RegularTopping)
-                sandwichString.append("\n\t-").append(topping);
+                sandwichString.append(String.format("\n|%-46s|", "\t-" + topping));
             if (topping instanceof Sauce)
-                sandwichString.append("\n\t-").append(topping);
+                sandwichString.append(String.format("\n|%-46s|", "\t-" + topping));
         });
 
         return sandwichString.toString();
