@@ -1,5 +1,8 @@
 package com.pluralsight.shop;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class OrderMenu {
@@ -116,61 +119,49 @@ public class OrderMenu {
         boolean toasted = (Integer.parseInt(scanner.nextLine().trim()) == 1);
         if (toasted) System.out.println("Toasted bread, coming right up!");
 
-        System.out.println("1. Cheddar\n2. Provolone\n3. Swiss\n4. Mozzarella");
-        System.out.print("Please select a cheese to add: ");
-        int cheeseChoice = Integer.parseInt(scanner.nextLine().trim());
-        String cheeseType = switch (cheeseChoice) {
-            case 1 -> "Cheddar";
-            case 2 -> "Provolone";
-            case 3 -> "Swiss";
-            case 4 -> "Mozzarella";
-            default -> "";
-        };
+        List<Topping> cheeseOptions = new ArrayList<>(List.of
+                (new Cheese("Ham")
+                        , new Cheese("Cheddar")
+                        , new Cheese("Provolone")
+                        , new Cheese("Swiss")
+                        , new Cheese("Mozzarella")
+                ));
+        selectToppings(cheeseOptions);
 
         System.out.println("1. Yes\n2. No");
         System.out.print("Extra Cheese?: ");
         boolean extraCheese = (Integer.parseInt(scanner.nextLine().trim()) == 1);
 
-
-        System.out.println("1. Ham\n2. Turkey\n3. Salami\n4. Roast Beef\n5. Chicken");
-        System.out.print("Please select a meat to add: ");
-        int meatChoice = Integer.parseInt(scanner.nextLine().trim());
-        String meatType = switch (meatChoice) {
-            case 1 -> "Ham";
-            case 2 -> "Turkey";
-            case 3 -> "Salami";
-            case 4 -> "Roast Beef";
-            case 5 -> "Chicken";
-            default -> "";
-        };
-
+        List<Topping> meatOptions = new ArrayList<>(List.of
+                (new Meat("Ham")
+                        , new Meat("Turkey")
+                        , new Meat("Salami")
+                        , new Meat("Roast Beef")
+                        , new Meat("Chicken")
+                ));
+        selectToppings(meatOptions);
 
         System.out.println("1. Yes\n2. No");
         System.out.print("Extra Meat?: ");
         boolean extraMeat = (Integer.parseInt(scanner.nextLine().trim()) == 1);
 
-        System.out.println("1. Lettuce\n2. Onion\n3. Pickle\n4. Peppers\n5. Mushrooms");
-        System.out.print("Please select a topping to add: ");
-        int toppingChoice = Integer.parseInt(scanner.nextLine().trim());
-        String topping = switch (toppingChoice) {
-            case 1 -> "Lettuce";
-            case 2 -> "Onion";
-            case 3 -> "Pickle";
-            case 4 -> "Peppers";
-            case 5 -> "Mushrooms";
-            default -> "";
-        };
-        System.out.println("1. Mayo\n2. Mustard\n3. Vinaigrette\n4. Au Jus\n5. Guacamole");
-        System.out.print("Please select a sauce to add: ");
-        int sauceChoice = Integer.parseInt(scanner.nextLine().trim());
-        String sauce = switch (sauceChoice) {
-            case 1 -> "Mayo";
-            case 2 -> "Mustard";
-            case 3 -> "Vinaigrette";
-            case 4 -> "Au Jus";
-            case 5 -> "Guacamole";
-            default -> "";
-        };
+        List<Topping> regularToppingOptions = new ArrayList<>(List.of
+                (new Meat("Lettuce")
+                        , new Meat("Onion")
+                        , new Meat("Pickle")
+                        , new Meat("Peppers")
+                        , new Meat("Mushrooms")
+                ));
+        selectToppings(regularToppingOptions);
+
+        List<Topping> sauceOptions = new ArrayList<>(List.of
+                (new Meat("Mayo")
+                        , new Meat("Mustard")
+                        , new Meat("Vinaigrette")
+                        , new Meat("Au Jus")
+                        , new Meat("Guacamole")
+                ));
+        selectToppings(sauceOptions);
     }
 
     public void addChips(Order order) {
@@ -276,5 +267,49 @@ public class OrderMenu {
 
     }
 
+    public List<Topping> selectToppings(List<Topping> toppingsOptions){
+
+        List<Topping> toppingsSelected = new ArrayList<>();
+
+        boolean selecting = true;
+        while (selecting) {
+            try {
+                for (int i = 0; i < toppingsOptions.size(); i++)
+                    System.out.println(++i + ". " + toppingsOptions.get(i));
+                System.out.print("Please select a meat to add: ");
+                int meatChoice = Integer.parseInt(scanner.nextLine().trim());
+                switch (meatChoice) {
+                    case 1:
+                        toppingsSelected.add(toppingsOptions.get(0));
+                        toppingsOptions.remove(0);
+                        break;
+                    case 2:
+                        toppingsSelected.add(toppingsOptions.get(1));
+                        toppingsOptions.remove(1);
+                        break;
+                    case 3:
+                        toppingsSelected.add(toppingsOptions.get(2));
+                        toppingsOptions.remove(2);
+                        break;
+                    case 4:
+                        toppingsSelected.add(toppingsOptions.get(3));
+                        toppingsOptions.remove(3);
+                        break;
+                    case 5:
+                        toppingsSelected.add(toppingsOptions.get(4));
+                        toppingsOptions.remove(4);
+                        break;
+
+                    default:
+                        System.out.println("Invalid Choice! Please try again.");
+                }
+                selecting = false;
+            } catch (Exception e) {
+                System.out.println("Something went wrong! Please try again.");;
+            }
+        }
+
+        return toppingsSelected;
+    }
 
 }

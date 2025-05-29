@@ -1,18 +1,17 @@
 package com.pluralsight.shop;
 
 public abstract class Topping{
+    private String name;
 
-    private String type;
-
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Topping(String type) {
-        this.type = type;
+    public Topping(String name) {
+        this.name = name;
     }
 }
