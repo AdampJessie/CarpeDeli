@@ -1,4 +1,4 @@
-package com.pluralsight.shop;
+package com.pluralsight.shop.product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +81,7 @@ public class Sandwich extends Product{
         String toasted = (isToasted) ? "Toasted" : "Not Toasted";
         StringBuilder sandwichString = new StringBuilder();
 
-        sandwichString.append(String.format("Sandwich - %d\" - %s - %-12s | $%-6.2f |", size*4, breadType, toasted, getPrice()));
+        sandwichString.append(String.format("Sandwich - %2d\" - %-5s - %-12s | $%-5.2f |", size*4, breadType, toasted, getPrice()));
 
 
         toppings.forEach(topping ->{

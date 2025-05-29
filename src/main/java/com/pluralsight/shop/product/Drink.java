@@ -1,4 +1,4 @@
-package com.pluralsight.shop;
+package com.pluralsight.shop.product;
 
 public class Drink extends Product {
 
@@ -51,6 +51,6 @@ public class Drink extends Product {
 
     @Override
     public String toString() {
-        return String.format("Drink - %-6s - %-10s | %-5.2f", flavor, getStringSize(), getPrice());
+        return String.format("Drink - %-6s - %-20s | $%-5.2f |", flavor, getStringSize(), getPrice());
     }
 }

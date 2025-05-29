@@ -1,4 +1,4 @@
-package com.pluralsight.shop;
+package com.pluralsight.shop.product;
 
 public class Chip extends Product{
     private String type;
@@ -22,6 +22,6 @@ public class Chip extends Product{
 
     @Override
     public String toString() {
-        return String.format("Chips - %-19s | %-5.2f", type, getPrice());
+        return String.format("Chips - %-29s | $%-5.2f |", type, getPrice());
     }
 }

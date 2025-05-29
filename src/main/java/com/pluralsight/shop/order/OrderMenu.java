@@ -1,8 +1,9 @@
-package com.pluralsight.shop;
+package com.pluralsight.shop.order;
+
+import com.pluralsight.shop.product.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class OrderMenu {
@@ -23,7 +24,7 @@ public class OrderMenu {
                 ordering = false;
 
             } else {
-                 placeOrder();
+                placeOrder();
             }
 
         }
@@ -60,15 +61,12 @@ public class OrderMenu {
     }
 
 
-    public Order placeOrder() {
+    public void placeOrder() {
         Order order = new Order("New Order");
         boolean ordering = true;
         while (ordering) {
             System.out.println(colorCyan + textBorder + colorReset);
-
-            System.out.println("1. Add Sandwich\n2. Add Chips\n3. Add Drink\n4. Check Out");
-            System.out.println(colorCyan + textBorder + colorReset);
-
+            System.out.println("1. Add Sandwich\n2. Add Chips\n3. Add Drink\n4. Checkout\n5. Cancel Order");
             System.out.print("Please select an item to add to your order\nIf you are finished, confirm and check out: ");
             int orderChoice = Integer.parseInt(scanner.nextLine().trim());
 
@@ -83,14 +81,16 @@ public class OrderMenu {
                     addDrinks(order);
                     break;
                 case 4:
-                    if (!order.getOrder().isEmpty()) {
-                        orderCheck(order);
-                        ordering = false;
-                    } else System.out.println("Order is empty! Returning to selection.");
+                    orderCheck(order);
+                    ordering = false;
                     break;
+                case 5:
+                    order.cancelOrder();
+                    ordering = false;
+                    break;
+
             }
         }
-        return order;
     }
 
     public void orderSandwich(Order order) {
@@ -111,6 +111,7 @@ public class OrderMenu {
             case 4 -> "Wrap";
             default -> "";
         };
+        System.out.println(colorCyan + textBorder + colorReset);
         System.out.println(breadType + ", great choice!");
 
         boolean isToasted = false;
@@ -119,6 +120,7 @@ public class OrderMenu {
             System.out.println("Would you like that toasted?");
             System.out.print("1. Yes 2. No: ");
             isToasted = (Integer.parseInt(scanner.nextLine().trim()) == 1);
+            System.out.println(colorCyan + textBorder + colorReset);
             if (isToasted) System.out.println("Toasted bread, coming right up!");
         }
 
@@ -129,11 +131,10 @@ public class OrderMenu {
                         , new Meat("Roast Beef")
                         , new Meat("Chicken")
                 ));
-        System.out.println(colorCyan + textBorder + colorReset);
         List<Topping> sandwichToppings = new ArrayList<>(selectToppings(meatOptions));
 
         System.out.println(colorCyan + textBorder + colorReset);
-        System.out.println("Extra Meat?");
+        System.out.println("Extra Meat? ($)");
         System.out.print("1. Yes 2. No: ");
         boolean extraMeat = (Integer.parseInt(scanner.nextLine().trim()) == 1);
 
@@ -148,7 +149,7 @@ public class OrderMenu {
         sandwichToppings.addAll(selectToppings(cheeseOptions));
 
         System.out.println(colorCyan + textBorder + colorReset);
-        System.out.println("Extra Cheese?");
+        System.out.println("Extra Cheese? ($)");
         System.out.print("1. Yes 2. No: ");
         boolean extraCheese = (Integer.parseInt(scanner.nextLine().trim()) == 1);
 
@@ -169,8 +170,6 @@ public class OrderMenu {
                         , new Sauce("Au Jus")
                         , new Sauce("Guacamole")
                 ));
-
-        System.out.println(colorCyan + textBorder + colorReset);
         sandwichToppings.addAll(selectToppings(sauceOptions));
 
         order.add(new Sandwich(isToasted, extraMeat, extraCheese, breadType, intSize, sandwichToppings));
@@ -245,17 +244,23 @@ public class OrderMenu {
 
     public void orderCheck(Order order) {
 
+        System.out.println(colorCyan + textBorder + colorReset);
+        if (order.getOrder().isEmpty()) {
+            System.out.println("Nothing to checkout!");
+            return;
+        }
         System.out.println(order.receipt());
 
         boolean confirming = true;
         while (confirming) {
             System.out.println(colorCyan + textBorder + colorReset);
             System.out.println("Everything accounted for?");
-            System.out.println("1. Confirm\n2. Cancel");
+            System.out.println("1. Confirm 2. Cancel");
             int choice = Integer.parseInt(scanner.nextLine());
 
             if (choice == 1) {
-                checkOut(order);
+                order.receiptToFile();
+                displayEnd();
                 confirming = false;
             } else if (choice == 2) {
                 order.cancelOrder();
@@ -271,13 +276,6 @@ public class OrderMenu {
 
     }
 
-    public void checkOut(Order order) {
-
-        OrderFileManager fileManager = new OrderFileManager();
-        fileManager.saveReceipt(order);
-        displayEnd();
-
-    }
 
     public List<Topping> selectToppings(List<Topping> toppingsOptions) {
 
@@ -286,6 +284,7 @@ public class OrderMenu {
         boolean selecting = true;
         while (selecting) {
             try {
+                System.out.println(colorCyan + textBorder + colorReset);
                 for (int i = 0; i < toppingsOptions.size(); i++)
                     System.out.println(i + 1 + ". " + toppingsOptions.get(i));
                 System.out.println("0. Finished");
@@ -317,14 +316,35 @@ public class OrderMenu {
                         break;
 
                     default:
+                        System.out.println(colorCyan + textBorder + colorReset);
                         System.out.println("Invalid Choice! Please try again.");
                 }
             } catch (Exception e) {
+                System.out.println(colorCyan + textBorder + colorReset);
                 System.out.println("Something went wrong! Please try again.");
             }
         }
 
         return toppingsSelected;
+    }
+
+    public boolean promptYesNo(String promptMessage){
+
+        boolean asking = true;
+        int choice = 0;
+        while (asking) {
+            System.out.println(colorCyan + textBorder + colorReset);
+            System.out.println(promptMessage);
+            System.out.println("1. Yes 2. No");
+            choice = Integer.parseInt(scanner.nextLine());
+
+            if (!(choice == 1) && !(choice == 2))
+                System.out.println("Invalid option! Please try again.");
+            else asking = false;
+        }
+
+        return choice == 1;
+
     }
 
 }

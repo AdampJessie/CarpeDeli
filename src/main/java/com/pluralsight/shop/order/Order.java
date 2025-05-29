@@ -1,4 +1,9 @@
-package com.pluralsight.shop;
+package com.pluralsight.shop.order;
+
+import com.pluralsight.shop.product.Chip;
+import com.pluralsight.shop.product.Drink;
+import com.pluralsight.shop.product.Product;
+import com.pluralsight.shop.product.Sandwich;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -59,9 +64,9 @@ public class Order {
     public String receipt() {
 
         StringBuilder receiptBuilder = new StringBuilder();
-        receiptBuilder.append("-".repeat(50))
-                .append(String.format("\n|  |"));
-        receiptBuilder.append("\n| Order #").append(this.getDate())
+        receiptBuilder.append("\n").append("+").append("-".repeat(48)).append("+")
+                .append(String.format("\n| %-46s |", "Carpe Deli - Seize the Treat!"));
+        receiptBuilder.append(String.format("\n| %-46s |", "Order #"+getDate()))
                 .append("\n").append("+").append("-".repeat(48)).append("+");
         order.forEach(product -> {
             if (product instanceof Sandwich)
@@ -79,6 +84,11 @@ public class Order {
 
 
         return receiptBuilder.toString();
+    }
+
+    public void receiptToFile(){
+        OrderFileManager fileManager = new OrderFileManager();
+        fileManager.saveReceipt(this);
     }
 
 }

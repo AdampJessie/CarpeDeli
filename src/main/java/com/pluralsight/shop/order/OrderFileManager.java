@@ -1,4 +1,4 @@
-package com.pluralsight.shop;
+package com.pluralsight.shop.order;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

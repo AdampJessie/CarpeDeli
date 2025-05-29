@@ -1,4 +1,4 @@
-package com.pluralsight.shop;
+package com.pluralsight.shop.product;
 
 public class Cheese extends Topping {
 
