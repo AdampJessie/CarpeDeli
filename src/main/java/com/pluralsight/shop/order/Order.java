@@ -80,6 +80,8 @@ public class Order {
             if (product instanceof Drink) receiptBuilder.append("\n| ").append(product);
         });
         receiptBuilder.append("\n").append("+").append("-".repeat(48)).append("+");
+        receiptBuilder.append(String.format("\n| %-46s |", String.format("Total Due - %.2f", getTotal())))
+                .append("\n").append("+").append("-".repeat(48)).append("+");
 
 
 

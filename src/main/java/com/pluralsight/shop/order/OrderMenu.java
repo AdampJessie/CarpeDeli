@@ -9,6 +9,12 @@ import java.util.Scanner;
 public class OrderMenu {
 
     Scanner scanner = new Scanner(System.in);
+    private final String colorReset = "\u001B[0m";
+    private final String colorCyan = "\u001B[36m";
+    private final String colorGreen = "\u001B[32m";
+    private final String colorBlue = "\u001B[34m";
+    private final String colorRed = "\u001B[31m";
+    private final String textBorder = "-".repeat(50);
 
     public void display() {
 
@@ -31,13 +37,6 @@ public class OrderMenu {
 
     }
 
-    private final String colorReset = "\u001B[0m";
-    private final String colorCyan = "\u001B[36m";
-    private final String colorGreen = "\u001B[32m";
-    private final String colorBlue = "\u001B[34m";
-    private final String colorRed = "\u001B[31m";
-    private final String textBorder = "-".repeat(50);
-
     public void displayStart() {
 
         String welcomeMessage = "Welcome to " + colorGreen + "Carpe Deli" + colorReset + "! "
@@ -59,7 +58,6 @@ public class OrderMenu {
         System.out.println(endMessage);
 
     }
-
 
     public void placeOrder() {
         Order order = new Order("New Order");
@@ -93,6 +91,28 @@ public class OrderMenu {
         }
     }
 
+    public void orderCheck(Order order) {
+
+        System.out.println(colorCyan + textBorder + colorReset);
+        if (order.getOrder().isEmpty()) {
+            System.out.println("Nothing to checkout!");
+            return;
+        }
+        System.out.println(order.receipt());
+
+        System.out.println(colorCyan + textBorder + colorReset);
+        boolean correct = promptYesNo("Everything accounted for?");
+
+        if (correct) {
+            order.receiptToFile();
+            displayEnd();
+        } else {
+            order.cancelOrder();
+            System.out.println(colorCyan + textBorder + colorReset);
+            System.out.println("Order cancelled! Try again?");
+        }
+    }
+
     public void orderSandwich(Order order) {
 
         System.out.println(colorCyan + textBorder + colorReset);
@@ -115,61 +135,33 @@ public class OrderMenu {
         System.out.println(breadType + ", great choice!");
 
         boolean isToasted = false;
+
         if (!breadType.equalsIgnoreCase("Wrap")) {
-            System.out.println(colorCyan + textBorder + colorReset);
-            System.out.println("Would you like that toasted?");
-            System.out.print("1. Yes 2. No: ");
-            isToasted = (Integer.parseInt(scanner.nextLine().trim()) == 1);
-            System.out.println(colorCyan + textBorder + colorReset);
-            if (isToasted) System.out.println("Toasted bread, coming right up!");
+            isToasted = promptYesNo("Would you like that toasted?");
+            if (isToasted) {
+                System.out.println(colorCyan + textBorder + colorReset);
+                System.out.println("Toasted bread, coming right up!");
+            }
         }
 
-        List<Topping> meatOptions = new ArrayList<>(List.of
-                (new Meat("Ham")
-                        , new Meat("Turkey")
-                        , new Meat("Salami")
-                        , new Meat("Roast Beef")
-                        , new Meat("Chicken")
-                ));
+        List<Topping> meatOptions = getAvailableToppings("Meat");
         List<Topping> sandwichToppings = new ArrayList<>(selectToppings(meatOptions));
 
-        System.out.println(colorCyan + textBorder + colorReset);
-        System.out.println("Extra Meat? ($)");
-        System.out.print("1. Yes 2. No: ");
-        boolean extraMeat = (Integer.parseInt(scanner.nextLine().trim()) == 1);
+        boolean extraMeat = false;
+        if (sandwichToppings.stream().anyMatch(Meat -> true))
+            extraMeat = promptYesNo("Extra Meat? ($)");
 
-
-        List<Topping> cheeseOptions = new ArrayList<>(List.of
-                (new Cheese("American")
-                        , new Cheese("Cheddar")
-                        , new Cheese("Provolone")
-                        , new Cheese("Swiss")
-                        , new Cheese("Mozzarella")
-                ));
+        List<Topping> cheeseOptions = getAvailableToppings("Cheese");
         sandwichToppings.addAll(selectToppings(cheeseOptions));
 
-        System.out.println(colorCyan + textBorder + colorReset);
-        System.out.println("Extra Cheese? ($)");
-        System.out.print("1. Yes 2. No: ");
-        boolean extraCheese = (Integer.parseInt(scanner.nextLine().trim()) == 1);
+        boolean extraCheese = false;
+        if (sandwichToppings.stream().anyMatch(Cheese -> true))
+             extraCheese = promptYesNo("Extra Cheese? ($)");
 
-
-        List<Topping> regularToppingOptions = new ArrayList<>(List.of
-                (new RegularTopping("Lettuce")
-                        , new RegularTopping("Onion")
-                        , new RegularTopping("Pickle")
-                        , new RegularTopping("Peppers")
-                        , new RegularTopping("Mushrooms")
-                ));
+        List<Topping> regularToppingOptions = getAvailableToppings("regularTopping");
         sandwichToppings.addAll(selectToppings(regularToppingOptions));
 
-        List<Topping> sauceOptions = new ArrayList<>(List.of
-                (new Sauce("Mayo")
-                        , new Sauce("Mustard")
-                        , new Sauce("Vinaigrette")
-                        , new Sauce("Au Jus")
-                        , new Sauce("Guacamole")
-                ));
+        List<Topping> sauceOptions = getAvailableToppings("Sauce");
         sandwichToppings.addAll(selectToppings(sauceOptions));
 
         order.add(new Sandwich(isToasted, extraMeat, extraCheese, breadType, intSize, sandwichToppings));
@@ -242,40 +234,44 @@ public class OrderMenu {
 
     }
 
-    public void orderCheck(Order order) {
 
-        System.out.println(colorCyan + textBorder + colorReset);
-        if (order.getOrder().isEmpty()) {
-            System.out.println("Nothing to checkout!");
-            return;
+    public List<Topping> getAvailableToppings(String topping) {
+        List<Topping> availableToppings = null;
+
+        if (topping.equalsIgnoreCase("Meat")) {
+            availableToppings = new ArrayList<>(List.of
+                    (new Meat("Ham")
+                            , new Meat("Turkey")
+                            , new Meat("Salami")
+                            , new Meat("Roast Beef")
+                            , new Meat("Chicken")));
         }
-        System.out.println(order.receipt());
-
-        boolean confirming = true;
-        while (confirming) {
-            System.out.println(colorCyan + textBorder + colorReset);
-            System.out.println("Everything accounted for?");
-            System.out.println("1. Confirm 2. Cancel");
-            int choice = Integer.parseInt(scanner.nextLine());
-
-            if (choice == 1) {
-                order.receiptToFile();
-                displayEnd();
-                confirming = false;
-            } else if (choice == 2) {
-                order.cancelOrder();
-                System.out.println(colorCyan + textBorder + colorReset);
-                System.out.println("Order cancelled! Try again?");
-                confirming = false;
-            } else {
-                System.out.println(colorCyan + textBorder + colorReset);
-                System.out.println("Invalid option! Please try again.");
-            }
+        if (topping.equalsIgnoreCase("Cheese")) {
+            availableToppings = new ArrayList<>(List.of
+                    (new Cheese("American")
+                            , new Cheese("Cheddar")
+                            , new Cheese("Provolone")
+                            , new Cheese("Swiss")
+                            , new Cheese("Mozzarella")));
         }
-
-
+        if (topping.equalsIgnoreCase("regularTopping")) {
+            availableToppings = new ArrayList<>(List.of
+                    (new RegularTopping("Lettuce")
+                            , new RegularTopping("Onion")
+                            , new RegularTopping("Pickle")
+                            , new RegularTopping("Peppers")
+                            , new RegularTopping("Mushrooms")));
+        }
+        if (topping.equalsIgnoreCase("Sauce")) {
+            availableToppings = new ArrayList<>(List.of
+                    (new Sauce("Mayo")
+                            , new Sauce("Mustard")
+                            , new Sauce("Vinaigrette")
+                            , new Sauce("Au Jus")
+                            , new Sauce("Guacamole")));
+        }
+        return availableToppings;
     }
-
 
     public List<Topping> selectToppings(List<Topping> toppingsOptions) {
 
@@ -328,14 +324,14 @@ public class OrderMenu {
         return toppingsSelected;
     }
 
-    public boolean promptYesNo(String promptMessage){
+    public boolean promptYesNo(String promptMessage) {
 
         boolean asking = true;
         int choice = 0;
         while (asking) {
             System.out.println(colorCyan + textBorder + colorReset);
             System.out.println(promptMessage);
-            System.out.println("1. Yes 2. No");
+            System.out.print("(1. Yes) (2. No): ");
             choice = Integer.parseInt(scanner.nextLine());
 
             if (!(choice == 1) && !(choice == 2))

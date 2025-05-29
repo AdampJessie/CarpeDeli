@@ -9,7 +9,6 @@ public class Main {
         OrderMenu order = new OrderMenu();
         order.display();
 
-
     }
 
 }

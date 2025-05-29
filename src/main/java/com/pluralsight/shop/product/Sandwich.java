@@ -3,7 +3,7 @@ package com.pluralsight.shop.product;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sandwich extends Product{
+public class Sandwich extends Product {
     private double price = 0;
     private boolean isToasted, extraMeat, extraCheese;
     private String breadType;
@@ -34,10 +34,10 @@ public class Sandwich extends Product{
         this.size = size;
     }
 
-    public List<Meat> getMeatToppings(){
+    public List<Meat> getMeatToppings() {
         List<Meat> meats = new ArrayList<>();
 
-        toppings.forEach(topping ->{
+        toppings.forEach(topping -> {
             if (topping instanceof Meat meat)
                 meats.add(meat);
         });
@@ -45,10 +45,10 @@ public class Sandwich extends Product{
         return meats;
     }
 
-    public List<Cheese> getCheeseToppings(){
+    public List<Cheese> getCheeseToppings() {
         List<Cheese> cheeses = new ArrayList<>();
 
-        toppings.forEach(topping ->{
+        toppings.forEach(topping -> {
             if (topping instanceof Cheese cheese)
                 cheeses.add(cheese);
         });
@@ -60,9 +60,9 @@ public class Sandwich extends Product{
     public double getPrice() {
 
         price = 4 + (1.50 * getSize());
-        price += getCheeseToppings().size() * (.75 * getSize());
+        price += getSize() * (getCheeseToppings().stream().mapToDouble(Cheese::getPrice).sum());
         if (extraCheese) price += .30 * getSize();
-        price += getMeatToppings().size() * getSize();
+        price += getSize() * (getMeatToppings().stream().mapToDouble(Meat::getPrice).sum());
         if (extraMeat) price += .50 * getSize();
         return price;
     }
@@ -81,10 +81,10 @@ public class Sandwich extends Product{
         String toasted = (isToasted) ? "Toasted" : "Not Toasted";
         StringBuilder sandwichString = new StringBuilder();
 
-        sandwichString.append(String.format("Sandwich - %2d\" - %-5s - %-12s | $%-5.2f |", size*4, breadType, toasted, getPrice()));
+        sandwichString.append(String.format("Sandwich - %2d\" - %-5s - %-12s | $%-5.2f |", size * 4, breadType, toasted, getPrice()));
 
 
-        toppings.forEach(topping ->{
+        toppings.forEach(topping -> {
             if (topping instanceof Meat)
                 sandwichString.append(String.format("\n|%-46s|", "\t-" + topping));
             if (topping instanceof Cheese)
