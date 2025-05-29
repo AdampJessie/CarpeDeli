@@ -12,7 +12,4 @@ public class Product {
         this.price = price;
     }
 
-    public Product(double price) {
-        this.price = price;
-    }
 }

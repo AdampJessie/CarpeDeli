@@ -31,37 +31,43 @@ public class Order {
         this.description = description;
     }
 
-    public void add(Product product){
+    public void add(Product product) {
         order.add(product);
     }
 
-    public void remove(Product product){
+    public void remove(Product product) {
         order.remove(product);
     }
 
-    public void cancelOrder(){
+    public void cancelOrder() {
         order.clear();
     }
 
-    public double getTotal(){
+    public double getTotal() {
         return order.stream()
                 .mapToDouble(Product::getPrice).sum();
     }
 
-    public String receipt(){
+    public String receipt() {
 
         StringBuilder receiptBuilder = new StringBuilder();
-        receiptBuilder.append("Carpe Deli - Seize the Treat!");
-        receiptBuilder.append("\nOrder #").append(this.getDate());
+        receiptBuilder.append("-".repeat(50))
+                .append("\nCarpe Deli - Seize the Treat!");
+        receiptBuilder.append("\nOrder #").append(this.getDate())
+                .append("\n").append("-".repeat(50));
         order.forEach(product -> {
-            if (product instanceof Sandwich) receiptBuilder.append("\n\t").append(product);
+            if (product instanceof Sandwich)
+                receiptBuilder.append("\n\t").append(product);
         });
         order.forEach(product -> {
             if (product instanceof Chip) receiptBuilder.append("\n\t").append(product);
+
         });
         order.forEach(product -> {
             if (product instanceof Drink) receiptBuilder.append("\n\t").append(product);
         });
+        receiptBuilder.append("\n").append("-".repeat(50))
+                .append(String.format("\nTotal Due: $%.2f", getTotal()));
 
 
         return receiptBuilder.toString();

@@ -74,7 +74,7 @@ public class OrderMenu {
 
             switch (orderChoice) {
                 case 1:
-                    orderSandwich();
+                    orderSandwich(order);
                     break;
                 case 2:
                     addChips(order);
@@ -91,18 +91,14 @@ public class OrderMenu {
         return order;
     }
 
-    public void orderSandwich() {
+    public void orderSandwich(Order order) {
 
+        System.out.println(colorCyan + textBorder + colorReset);
         System.out.println("1. Small\n2. Medium\n3. Large");
         System.out.print("Please select a size for your sandwich: ");
         int intSize = Integer.parseInt(scanner.nextLine().trim());
-        String size = switch (intSize) {
-            case 1 -> "Small";
-            case 2 -> "Medium";
-            case 3 -> "Large";
-            default -> "";
-        };
 
+        System.out.println(colorCyan + textBorder + colorReset);
         System.out.println("1. White\n2. Wheat\n3. Rye\n4. Wrap");
         System.out.print("Please select the type of bread: ");
         int breadChoice = Integer.parseInt(scanner.nextLine().trim());
@@ -114,23 +110,11 @@ public class OrderMenu {
             default -> "";
         };
 
-        System.out.println("1. Yes\n2. No");
-        System.out.print("Toasted?: ");
-        boolean toasted = (Integer.parseInt(scanner.nextLine().trim()) == 1);
-        if (toasted) System.out.println("Toasted bread, coming right up!");
-
-        List<Topping> cheeseOptions = new ArrayList<>(List.of
-                (new Cheese("Ham")
-                        , new Cheese("Cheddar")
-                        , new Cheese("Provolone")
-                        , new Cheese("Swiss")
-                        , new Cheese("Mozzarella")
-                ));
-        selectToppings(cheeseOptions);
-
-        System.out.println("1. Yes\n2. No");
-        System.out.print("Extra Cheese?: ");
-        boolean extraCheese = (Integer.parseInt(scanner.nextLine().trim()) == 1);
+        System.out.println(colorCyan + textBorder + colorReset);
+        System.out.println("Toasted?");
+        System.out.print("1. Yes 2. No: ");
+        boolean isToasted = (Integer.parseInt(scanner.nextLine().trim()) == 1);
+        if (isToasted) System.out.println("Toasted bread, coming right up!");
 
         List<Topping> meatOptions = new ArrayList<>(List.of
                 (new Meat("Ham")
@@ -139,29 +123,52 @@ public class OrderMenu {
                         , new Meat("Roast Beef")
                         , new Meat("Chicken")
                 ));
-        selectToppings(meatOptions);
+        System.out.println(colorCyan + textBorder + colorReset);
+        List<Topping> sandwichToppings = new ArrayList<>(selectToppings(meatOptions));
 
-        System.out.println("1. Yes\n2. No");
-        System.out.print("Extra Meat?: ");
+        System.out.println(colorCyan + textBorder + colorReset);
+        System.out.println("Extra Meat?");
+        System.out.print("1. Yes 2. No: ");
         boolean extraMeat = (Integer.parseInt(scanner.nextLine().trim()) == 1);
 
-        List<Topping> regularToppingOptions = new ArrayList<>(List.of
-                (new Meat("Lettuce")
-                        , new Meat("Onion")
-                        , new Meat("Pickle")
-                        , new Meat("Peppers")
-                        , new Meat("Mushrooms")
+
+        List<Topping> cheeseOptions = new ArrayList<>(List.of
+                (new Cheese("American")
+                        , new Cheese("Cheddar")
+                        , new Cheese("Provolone")
+                        , new Cheese("Swiss")
+                        , new Cheese("Mozzarella")
                 ));
-        selectToppings(regularToppingOptions);
+        sandwichToppings.addAll(selectToppings(cheeseOptions));
+
+        System.out.println(colorCyan + textBorder + colorReset);
+        System.out.println("Extra Cheese?");
+        System.out.print("1. Yes 2. No: ");
+        boolean extraCheese = (Integer.parseInt(scanner.nextLine().trim()) == 1);
+
+
+        List<Topping> regularToppingOptions = new ArrayList<>(List.of
+                (new RegularTopping("Lettuce")
+                        , new RegularTopping("Onion")
+                        , new RegularTopping("Pickle")
+                        , new RegularTopping("Peppers")
+                        , new RegularTopping("Mushrooms")
+                ));
+        sandwichToppings.addAll(selectToppings(regularToppingOptions));
 
         List<Topping> sauceOptions = new ArrayList<>(List.of
-                (new Meat("Mayo")
-                        , new Meat("Mustard")
-                        , new Meat("Vinaigrette")
-                        , new Meat("Au Jus")
-                        , new Meat("Guacamole")
+                (new Sauce("Mayo")
+                        , new Sauce("Mustard")
+                        , new Sauce("Vinaigrette")
+                        , new Sauce("Au Jus")
+                        , new Sauce("Guacamole")
                 ));
-        selectToppings(sauceOptions);
+        
+        System.out.println(colorCyan + textBorder + colorReset);
+        sandwichToppings.addAll(selectToppings(sauceOptions));
+
+        order.add(new Sandwich(isToasted, extraMeat, extraCheese, breadType, intSize, sandwichToppings));
+
     }
 
     public void addChips(Order order) {
@@ -182,7 +189,7 @@ public class OrderMenu {
         System.out.println(colorCyan + textBorder + colorReset);
 
         if (!chipFlavor.isEmpty()) {
-            order.add(new Chip(1.50, chipFlavor));
+            order.add(new Chip(chipFlavor));
             System.out.println("Added " + chipFlavor + " Chips for $1.50!");
         } else System.out.println("Failed to add chips! Please try again.");
 
@@ -221,13 +228,10 @@ public class OrderMenu {
             default -> "";
         };
 
-        if (drinkFlavor.equalsIgnoreCase("Water"))
-            drinkPrice = 0.0;
-
         System.out.println(colorCyan + textBorder + colorReset);
 
         if (!drinkFlavor.isEmpty() && !stringSize.isEmpty()) {
-            order.add(new Drink(drinkPrice, intSize, drinkFlavor));
+            order.add(new Drink(intSize, drinkFlavor));
             System.out.printf("Successfully added a %s %s for $%.2f!\n", stringSize, drinkFlavor, drinkPrice);
         } else System.out.println("Failed to add drink! Please try again.");
 
@@ -260,14 +264,11 @@ public class OrderMenu {
 
         OrderFileManager fileManager = new OrderFileManager();
         fileManager.saveReceipt(order);
-
-        String successMessage = "Sucess! Order confirmed, receipt saved!";
-        System.out.println(colorGreen + successMessage + colorReset);
         displayEnd();
 
     }
 
-    public List<Topping> selectToppings(List<Topping> toppingsOptions){
+    public List<Topping> selectToppings(List<Topping> toppingsOptions) {
 
         List<Topping> toppingsSelected = new ArrayList<>();
 
@@ -275,10 +276,11 @@ public class OrderMenu {
         while (selecting) {
             try {
                 for (int i = 0; i < toppingsOptions.size(); i++)
-                    System.out.println(++i + ". " + toppingsOptions.get(i));
-                System.out.print("Please select a meat to add: ");
-                int meatChoice = Integer.parseInt(scanner.nextLine().trim());
-                switch (meatChoice) {
+                    System.out.println(i + 1 + ". " + toppingsOptions.get(i));
+                System.out.println("0. Finished");
+                System.out.print("Please select a topping to add: ");
+                int toppingChoice = Integer.parseInt(scanner.nextLine().trim());
+                switch (toppingChoice) {
                     case 1:
                         toppingsSelected.add(toppingsOptions.get(0));
                         toppingsOptions.remove(0);
@@ -299,13 +301,15 @@ public class OrderMenu {
                         toppingsSelected.add(toppingsOptions.get(4));
                         toppingsOptions.remove(4);
                         break;
+                    case 0:
+                        selecting = false;
+                        break;
 
                     default:
                         System.out.println("Invalid Choice! Please try again.");
                 }
-                selecting = false;
             } catch (Exception e) {
-                System.out.println("Something went wrong! Please try again.");;
+                System.out.println("Something went wrong! Please try again.");
             }
         }
 

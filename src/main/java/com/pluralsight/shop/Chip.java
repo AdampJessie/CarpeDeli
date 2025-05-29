@@ -11,13 +11,17 @@ public class Chip extends Product{
         this.type = type;
     }
 
-    public Chip(double price, String type) {
-        super(price);
+    public Chip(String type) {
         this.type = type;
     }
 
     @Override
+    public double getPrice() {
+        return 1.50;
+    }
+
+    @Override
     public String toString() {
-        return String.format("Chips - %-10s | %.2f", this.getType(), this.getPrice());
+        return String.format("Chips - %-19s | %-5.2f", type, getPrice());
     }
 }
