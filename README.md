@@ -5,7 +5,7 @@
 This program is a point-of-sale application for a Deli. Customers are prompted to place an order, and then pick from
 a list of products including Sandwich, Chips, and a Drink. Users build sandwiches with their choice of (toasted) bread
 and toppings. When finished ordering, users will be prompted to check out, where they can confirm their order. When confirmed,
-a receipt is saved to a txt file. Each order creates a new receipt with the current date/time.
+a receipt is saved to a txt file. Each order creates a new receipt with the current date/time.g
 
 
 ![Class Diagram](README/diagram.png)

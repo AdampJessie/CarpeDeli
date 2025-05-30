@@ -113,24 +113,46 @@ public class OrderMenu {
 
     public void orderSandwich(Order order) {
 
-        System.out.println(colorCyan + textBorder + colorReset);
-        System.out.println("1. Small (4\")\n2. Medium (8\")\n3. Large (12\")");
-        System.out.print("Please select a size for your sandwich: ");
-        int intSize = Integer.parseInt(scanner.nextLine().trim());
+        boolean sizing = true;
+        int size = 0;
+        while (sizing) {
+            System.out.println(colorCyan + textBorder + colorReset);
+            System.out.println("1. Small (4\")\n2. Medium (8\")\n3. Large (12\")");
+            System.out.print("Please select a size for your sandwich: ");
+            int sizeChoice = Integer.parseInt(scanner.nextLine().trim());
+            if (sizeChoice == 1 || sizeChoice == 2 || sizeChoice == 3) {
+                size = sizeChoice;
+                sizing = false;
+            } else {
+                System.out.println(colorCyan + textBorder + colorReset);
+                System.out.println("Invalid choice!");
+            }
 
-        System.out.println(colorCyan + textBorder + colorReset);
-        System.out.println("1. White\n2. Wheat\n3. Rye\n4. Wrap");
-        System.out.print("Please select the type of bread: ");
-        int breadChoice = Integer.parseInt(scanner.nextLine().trim());
-        String breadType = switch (breadChoice) {
-            case 1 -> "White";
-            case 2 -> "Wheat";
-            case 3 -> "Rye";
-            case 4 -> "Wrap";
-            default -> "";
-        };
-        System.out.println(colorCyan + textBorder + colorReset);
-        System.out.println(breadType + ", great choice!");
+        }
+
+        String breadType = null;
+        boolean breading = true;
+        while (breading) {
+            System.out.println(colorCyan + textBorder + colorReset);
+            System.out.println("1. White\n2. Wheat\n3. Rye\n4. Wrap");
+            System.out.print("Please select the type of bread: ");
+            int breadChoice = Integer.parseInt(scanner.nextLine().trim());
+            if (breadChoice >= 1 && breadChoice <= 4) {
+                breadType = switch (breadChoice) {
+                    case 1 -> "White";
+                    case 2 -> "Wheat";
+                    case 3 -> "Rye";
+                    case 4 -> "Wrap";
+                    default -> "";
+                };
+                System.out.println(colorCyan + textBorder + colorReset);
+                System.out.println(breadType + ", great choice!");
+                breading = false;
+            } else {
+                System.out.println(colorCyan + textBorder + colorReset);
+                System.out.println("Invalid choice!");
+            }
+        }
 
         boolean isToasted = false;
 
@@ -154,7 +176,7 @@ public class OrderMenu {
 
         boolean extraCheese = false;
         if (sandwichToppings.stream().anyMatch(Cheese -> true))
-             extraCheese = promptYesNo("Extra Cheese? ($)");
+            extraCheese = promptYesNo("Extra Cheese? ($)");
 
         List<Topping> regularToppingOptions = getAvailableToppings("regularTopping");
         sandwichToppings.addAll(selectToppings(regularToppingOptions));
@@ -162,7 +184,7 @@ public class OrderMenu {
         List<Topping> sauceOptions = getAvailableToppings("Sauce");
         sandwichToppings.addAll(selectToppings(sauceOptions));
 
-        order.add(new Sandwich(isToasted, extraMeat, extraCheese, breadType, intSize, sandwichToppings));
+        order.add(new Sandwich(isToasted, extraMeat, extraCheese, breadType, size, sandwichToppings));
 
     }
 
@@ -340,5 +362,6 @@ public class OrderMenu {
         return choice == 1;
 
     }
+
 
 }
