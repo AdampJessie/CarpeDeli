@@ -100,12 +100,10 @@ public class OrderMenu {
         }
         System.out.println(order.receipt());
 
-        System.out.println(colorCyan + textBorder + colorReset);
         boolean correct = promptYesNo("Everything accounted for?");
 
         if (correct) {
             order.receiptToFile();
-            displayEnd();
         } else {
             order.cancelOrder();
             System.out.println(colorCyan + textBorder + colorReset);
